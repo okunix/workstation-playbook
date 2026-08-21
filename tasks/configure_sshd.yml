@@ -11,15 +11,15 @@
     regex: "{{ item.regex }}"
   loop:
     - regex: ^#?Port
-      line: Port 2244
+      line: Port {{ sshd_port | default(22) }}
     - regex: ^#?PasswordAuthentication
-      line: PasswordAuthentication no
+      line: PasswordAuthentication {{ sshd_password_authentication | default('no') }}
     - regex: ^#?PermitRootLogin
-      line: PermitRootLogin no
+      line: PermitRootLogin {{ sshd_permit_root_login | default('no') }}
     - regex: ^#?PubkeyAuthentication
-      line: PubkeyAuthentication yes
+      line: PubkeyAuthentication {{ sshd_pubkey_authentication | default('yes') }}
     - regex: ^#?PermitEmptyPasswords
-      line: PermitEmptyPasswords no
+      line: PermitEmptyPasswords {{ sshd_permit_empty_passwords | default('no') }}
     - regex: ^#?X11Forwarding
-      line: X11Forwarding no
+      line: X11Forwarding {{ sshd_x11_forwarding | default('no') }}
   notify: Restart sshd

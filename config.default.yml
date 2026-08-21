@@ -1,5 +1,15 @@
 # This playbook detects changes in this configuration and adds/removes packages,apps,repos,rules as defined here
 
+# sshd configuration
+sshd_port: 22
+# sshd_service: sshd
+# sshd_package: openssh
+# sshd_permit_empty_passwords: no
+# sshd_permit_root_login: no
+# sshd_password_authentication: no
+# sshd_pubkey_authentication: yes
+# sshd_x11_forwarding: no
+
 # A list of packages to install
 package_install: []
   # - zsh
