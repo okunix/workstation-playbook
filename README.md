@@ -9,3 +9,10 @@ cp config.default.yml config.yml
 # run playbook
 ansible-playbook -K local.yml
 ```
+
+Available tags:
+- package
+- flatpak
+- firewall
+- sudo
+- sshd
