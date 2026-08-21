@@ -1,0 +1,54 @@
+---
+- name: Installing ufw
+  ansible.builtin.package:
+    name: ufw
+
+- name: Allowing outgoing connections
+  community.general.ufw:
+    policy: allow
+    direction: outgoing
+
+- name: Denying incoming connections
+  community.general.ufw:
+    policy: deny
+    direction: incoming
+
+- name: Allowing ssh port
+  community.general.ufw:
+    port: "{{ ansible_port }}"
+    log: "{{ ufw_ssh_log | default(true) }}"
+    rule: allow
+  when: ansible_connection != 'local'
+
+- name: Adding ports
+  community.general.ufw:
+    port: "{{ item.port }}"
+    logging: "{{ item.logging | default(omit) }}"
+    log: "{{ item.log | default(omit) }}"
+    rule: "{{ item.rule | default('allow') }}"
+    proto: "{{ item.proto | default(omit) }}"
+    from_ip: "{{ item.from_ip | default(omit) }}"
+  loop: "{{ ufw_rules }}"
+  notify: Save rules
+
+- name: Removing ports
+  community.general.ufw:
+    port: "{{ item.port }}"
+    logging: "{{ item.logging | default(omit) }}"
+    log: "{{ item.log | default(omit) }}"
+    rule: "{{ item.rule | default('allow') }}"
+    proto: "{{ item.proto | default(omit) }}"
+    from_ip: "{{ item.from_ip | default(omit) }}"
+    delete: true
+  loop: "{{ ansible_local.ufw_rules | default(ufw_rules) | difference(ufw_rules) }}"
+  notify: Save rules
+
+- name: Enabling ufw
+  community.general.ufw:
+    state: enabled
+
+- name: Enabling ufw in service manager
+  ansible.builtin.service:
+    name: ufw
+    state: started
+    enabled: true

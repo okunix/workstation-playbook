@@ -1,0 +1,5 @@
+---
+flatpak_apps: []
+flatpak_repos:
+  - name: flathub
+    repo: https://flathub.org/repo/flathub.flatpakrepo

@@ -1,0 +1,11 @@
+# A list of packages to install
+package_install: []
+
+# A list of Flatpak apps to install
+flatpak_apps: []
+flatpak_repos:
+  - name: flathub
+    repo: https://flathub.org/repo/flathub.flatpakrepo
+
+# A list of ufw rules to add
+ufw_rules: []

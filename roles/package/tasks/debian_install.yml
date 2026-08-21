@@ -1,0 +1,5 @@
+---
+- name: Installing apt packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+  loop: "{{ package_install }}"

@@ -1,0 +1,40 @@
+---
+- name: Installing flatpak
+  ansible.builtin.package:
+    name: flatpak
+
+- name: Adding flatpak remote repositories
+  community.general.flatpak_remote:
+    flatpakrepo_url: "{{ item.repo }}"
+    name: "{{ item.name }}"
+  loop: "{{ flatpak_repos }}"
+  notify: Save repos
+
+- name: Removing flatpak repos
+  community.general.flatpak_remote:
+    flatpakrepo_url: "{{ item.repo }}"
+    name: "{{ item.name }}"
+  loop: "{{ ansible_local.flatpak_repos | default(flatpak_repos) | difference(flatpak_repos) }}"
+  notify: Save repos
+
+- name: Flushing handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Installing requested flatpak packages
+  community.general.flatpak:
+    name: "{{ parts[0] }}"
+    from_url: "{{ parts[1] | default(omit) }}"
+  vars:
+    parts: "{{ item | split('@') }}"
+  loop: "{{ flatpak_apps }}"
+  notify: Save apps
+
+- name: Removing unspeficied flatpak packages
+  community.general.flatpak:
+    name: "{{ parts[0] }}"
+    from_url: "{{ parts[1] | default(omit) }}"
+    state: absent
+  vars:
+    parts: "{{ item | split('@') }}"
+  loop: "{{ ansible_local.flatpak_apps | default(flatpak_apps) | difference(flatpak_apps) }}"
+  notify: Save apps

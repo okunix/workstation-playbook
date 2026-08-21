@@ -1,0 +1,36 @@
+---
+- name: Workstation Playbook
+  hosts: all
+  gather_facts: true
+  become: true
+  become_method: ansible.builtin.su
+  handlers:
+    - name: Importing handlers
+      ansible.builtin.import_tasks: handlers/main.yml
+  pre_tasks:
+    - name: Reading config
+      ansible.builtin.include_vars: "{{ item }}"
+      tags: always
+      with_fileglob:
+        - "{{ playbook_dir }}/config.default.yml"
+        - "{{ playbook_dir }}/config.yml"
+  roles:
+    - role: package
+      tags: ['packages']
+    - role: flatpak
+      tags: ['flatpak']
+    - role: ufw
+      tags: ['firewall']
+  tasks:
+    - name: Configuring sshd
+      tags: sshd
+      ansible.builtin.include_tasks:
+        file: tasks/configure_sshd.yml
+        apply:
+          tags: sshd
+    - name: Configuring sudo
+      tags: sudo
+      ansible.builtin.include_tasks:
+        file: tasks/configure_sudo.yml
+        apply:
+          tags: sudo

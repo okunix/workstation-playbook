@@ -1,0 +1,6 @@
+---
+- name: Removing apt packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ package_remove }}"

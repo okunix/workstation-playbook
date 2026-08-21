@@ -1,0 +1,25 @@
+---
+- name: Installing openssh
+  ansible.builtin.package:
+    name: "{{ sshd_package | default('openssh') }}"
+
+- name: Adjusting sshd config
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    validate: sshd -Tf %s
+    line: "{{ item.line }}"
+    regex: "{{ item.regex }}"
+  loop:
+    - regex: ^#?Port
+      line: Port 2244
+    - regex: ^#?PasswordAuthentication
+      line: PasswordAuthentication no
+    - regex: ^#?PermitRootLogin
+      line: PermitRootLogin no
+    - regex: ^#?PubkeyAuthentication
+      line: PubkeyAuthentication yes
+    - regex: ^#?PermitEmptyPasswords
+      line: PermitEmptyPasswords no
+    - regex: ^#?X11Forwarding
+      line: X11Forwarding no
+  notify: Restart sshd

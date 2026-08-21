@@ -1,0 +1,10 @@
+---
+- name: Installing sudo
+  ansible.builtin.package:
+    name: sudo
+
+- name: Adding wheel group to sudoers
+  ansible.builtin.lineinfile:
+    line: "%wheel ALL = (ALL) ALL"
+    path: /etc/sudoers
+    validate: visudo -cf %s

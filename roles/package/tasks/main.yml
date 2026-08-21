@@ -1,0 +1,14 @@
+---
+- name: Installing packages
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_os_family | lower }}_install.yml"
+    apply:
+      become: true
+      notify: Save state
+
+- name: Removing packages
+  ansible.builtin.include_tasks:
+    file: "{{ ansible_os_family | lower }}_remove.yml"
+    apply:
+      become: true
+      notify: Save state

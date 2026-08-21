@@ -1,0 +1,5 @@
+---
+- name: Installing apk packages
+  community.general.apk:
+    name: "{{ item }}"
+  loop: "{{ package_install }}"
