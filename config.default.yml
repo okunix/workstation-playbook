@@ -1,11 +1,25 @@
+# This playbook detects changes in this configuration and adds/removes packages,apps,repos,rules as defined here
+
 # A list of packages to install
 package_install: []
+  # - zsh
+  # - vim
+  # - fzf
 
 # A list of Flatpak apps to install
 flatpak_apps: []
+  # - com.brave.Browser
+  # - com.spotify.Client@https://s3.amazonaws.com/alexlarsson/spotify-repo/spotify.flatpakref
+
 flatpak_repos:
   - name: flathub
     repo: https://flathub.org/repo/flathub.flatpakrepo
 
 # A list of ufw rules to add
 ufw_rules: []
+  # - port: 443
+  #   logging: low # can be omitted
+  #   log: true # can be omitted
+  #   rule: allow # can be omitted
+  #   proto: tcp # can be omitted
+  #   from_ip: any  # can be omitted
