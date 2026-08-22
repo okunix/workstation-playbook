@@ -21,6 +21,8 @@
       tags: ['flatpak']
     - role: ufw
       tags: ['firewall']
+    - role: services
+      tags: ['services']
   tasks:
     - name: Configuring sshd
       tags: sshd

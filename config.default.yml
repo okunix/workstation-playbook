@@ -16,6 +16,10 @@ package_install: []
   # - vim
   # - fzf
 
+# A list of services to enable and run
+services_enabled: []
+  # - sshd
+
 # A list of Flatpak apps to install
 flatpak_apps: []
   # - com.brave.Browser
