@@ -11,7 +11,7 @@
     name: "{{ item }}"
     enabled: false
     state: stopped
-  loop: "{{ ansible_facts.local.services_enabled | default(services_enabled) | difference(services_enabled) }}"
+  loop: "{{ ansible_facts['ansible_local']['services_enabled'] | default(services_enabled) | difference(services_enabled) }}"
 
 - name: Creating facts.d directory
   ansible.builtin.file:
