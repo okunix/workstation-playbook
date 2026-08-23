@@ -1,2 +1,2 @@
 ---
-package_remove: "{{ ansible_local['packages'] | default(package_install) | difference(package_install) }}"
+package_remove: "{{ ansible_facts.ansible_local.packages | default(package_install) | difference(package_install) }}"

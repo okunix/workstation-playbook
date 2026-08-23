@@ -1,14 +1,25 @@
 ---
 - name: Installing packages
-  ansible.builtin.include_tasks:
-    file: "{{ ansible_os_family | lower }}_install.yml"
-    apply:
-      become: true
-      notify: Save state
+  ansible.builtin.package:
+    name: "{{ item }}"
+  loop: "{{ package_install }}"
 
 - name: Removing packages
-  ansible.builtin.include_tasks:
-    file: "{{ ansible_os_family | lower }}_remove.yml"
-    apply:
-      become: true
-      notify: Save state
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ package_remove }}"
+
+- name: Creating facts.d directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/ansible/facts.d
+    owner: root
+    mode: "0750"
+
+- name: Saving current state
+  ansible.builtin.copy:
+    dest: /etc/ansible/facts.d/packages.fact
+    content: "{{ package_install | to_json }}"
+    owner: root
+    mode: "0640"

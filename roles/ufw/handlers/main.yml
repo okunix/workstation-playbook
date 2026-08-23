@@ -2,19 +2,3 @@
 - name: Reload ufw
   community.general.ufw:
     state: reloaded
-
-- name: Creating facts.d directory
-  ansible.builtin.file:
-    state: directory
-    path: /etc/ansible/facts.d
-    mode: "0750"
-    owner: root
-  listen: Save rules
-
-- name: Saving rules state
-  ansible.builtin.copy:
-    content: "{{ ufw_rules | to_json }}"
-    dest: /etc/ansible/facts.d/ufw_rules.fact
-    mode: "0640"
-    owner: root
-  listen: Save rules

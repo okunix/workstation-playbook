@@ -1,5 +1,0 @@
----
-- name: Installing xbps packages
-  community.general.xbps:
-    name: "{{ item }}"
-  loop: "{{ package_install }}"

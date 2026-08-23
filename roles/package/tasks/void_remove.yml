@@ -1,6 +1,0 @@
----
-- name: Removing xbps packages
-  community.general.xbps:
-    name: "{{ item }}"
-    state: absent
-  loop: "{{ package_remove }}"

@@ -8,7 +8,6 @@
     flatpakrepo_url: "{{ item.repo }}"
     name: "{{ item.name }}"
   loop: "{{ flatpak_repos }}"
-  notify: Save repos
 
 - name: Removing flatpak repos
   community.general.flatpak_remote:
@@ -16,10 +15,6 @@
     name: "{{ item.name }}"
     state: absent
   loop: "{{ ansible_local.flatpak_repos | default(flatpak_repos) | difference(flatpak_repos) }}"
-  notify: Save repos
-
-- name: Flushing handlers
-  ansible.builtin.meta: flush_handlers
 
 - name: Installing requested flatpak packages
   community.general.flatpak:
@@ -28,7 +23,6 @@
   vars:
     parts: "{{ item | split('@') }}"
   loop: "{{ flatpak_apps }}"
-  notify: Save apps
 
 - name: Removing unspeficied flatpak packages
   community.general.flatpak:
@@ -37,5 +31,25 @@
     state: absent
   vars:
     parts: "{{ item | split('@') }}"
-  loop: "{{ ansible_local.flatpak_apps | default(flatpak_apps) | difference(flatpak_apps) }}"
-  notify: Save apps
+  loop: "{{ ansible_facts.ansible_local.flatpak_apps | default(flatpak_apps) | difference(flatpak_apps) }}"
+
+- name: Creating facts.d directory
+  ansible.builtin.file:
+    state: directory
+    path: /etc/ansible/facts.d
+    owner: root
+    mode: "0750"
+
+- name: Saving current apps
+  ansible.builtin.copy:
+    content: "{{ flatpak_apps | to_json }}"
+    dest: /etc/ansible/facts.d/flatpak_apps.fact
+    owner: root
+    mode: "0640"
+
+- name: Saving current repos
+  ansible.builtin.copy:
+    content: "{{ flatpak_repos | to_json }}"
+    dest: /etc/ansible/facts.d/flatpak_repos.fact
+    owner: root
+    mode: "0640"

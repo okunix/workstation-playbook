@@ -35,4 +35,6 @@
       ansible.builtin.include_tasks:
         file: tasks/configure_sudo.yml
         apply:
-          tags: sudo
+          tags:
+            - sudo
+            - never

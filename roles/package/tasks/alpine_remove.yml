@@ -1,6 +1,0 @@
----
-- name: Removing apk packages
-  community.general.apk:
-    name: "{{ item }}"
-    state: absent
-  loop: "{{ package_remove }}"
