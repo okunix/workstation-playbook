@@ -1,3 +1,4 @@
+#!/usr/bin/env -S ansible-playbook -K
 ---
 - name: Workstation Playbook
   hosts: all
