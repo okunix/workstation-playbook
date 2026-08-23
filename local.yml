@@ -19,7 +19,7 @@
     - role: package
       tags: ['packages']
     - role: flatpak
-      tags: ['flatpak']
+      tags: ['flatpak', 'never']
     - role: ufw
       tags: ['firewall']
     - role: services
